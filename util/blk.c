@@ -1,5 +1,6 @@
 #include <util.h>
 
+// Compares blocks of memory. Returns 0 when equal
 int blkcmp(const void* aptr, const void* bptr, size_t size) {
 	const unsigned char* a = (const unsigned char*) aptr;
 	const unsigned char* b = (const unsigned char*) bptr;
@@ -12,6 +13,7 @@ int blkcmp(const void* aptr, const void* bptr, size_t size) {
 	return 0;
 }
 
+// Copies a block of memory
 void blkcpy(void* dstptr, const void* srcptr, size_t size) {
 	unsigned char* dst = (unsigned char*) dstptr;
 	const unsigned char* src = (const unsigned char*) srcptr;

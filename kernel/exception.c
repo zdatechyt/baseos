@@ -3,6 +3,7 @@
 
 u8 mute_exceptions=0;
 
+// Handles and debugs GPFs
 void kernel_gpf(u32 errorcode) {
 	if (mute_exceptions==1) return;
 	terminal_writestring("GENERAL PROTECTION FAULT: ");
@@ -17,6 +18,7 @@ void kernel_gpf(u32 errorcode) {
 	mute_exceptions=1;
 	}
 
+// Handles and debugs double faults
 void kernel_dblflt(u32 errorcode) {
 	if (mute_exceptions==1) return;
 	terminal_writestring("!! !! D0U8L3 FAULT !! !!");

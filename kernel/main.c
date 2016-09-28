@@ -1,6 +1,7 @@
 #include <terminal.h>
 #include <interrupts.h>
 
+// Main C function for the kernel
 void kernel_main(void *mbh) {
 	terminal_initialize();
 	interrupts_install();

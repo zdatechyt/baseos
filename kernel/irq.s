@@ -1,8 +1,9 @@
 .text
 /* filename: irq.s */
+/* Copy and paste any of the handlers to make new ones. Make sure to change the names and the .globl name.
 
 /* irqs */
-
+/* example copy paste start*/
 .globl   irq_pit
 .align   4
  
@@ -12,6 +13,7 @@ irq_pit:
     call pit_irq
     popal
     iret
+/* example copy paste end*/
 
 .globl   irq_keyboard
 .align   4

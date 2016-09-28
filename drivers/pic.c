@@ -1,6 +1,7 @@
 #include <io.h>
 #include <pic.h>
 
+// Initialize PIC
 void pic_init(){
 	unsigned char a1, a2;
  
@@ -29,6 +30,7 @@ void pic_init(){
 	outb(PIC2_DATA, a2);
 	}
 
+// Tell PIC we're done handling a hardware interrupt
 void pic_sendEOI(unsigned char irq)
 {
 	if(irq >= 8)

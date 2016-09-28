@@ -9,6 +9,7 @@ uint8_t terminal_color;
 uint16_t* terminal_buffer;
 char terminal_hexchars[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
+// Initialize terminal driver variables and clear screen.
 void terminal_initialize() {
 	terminal_row = 0;
 	terminal_column = 0;
@@ -22,15 +23,18 @@ void terminal_initialize() {
 	}
 }
 
+// Get address in framebuffer of the specified line
 void *terminal_get_line_address(int ln) {
 	return terminal_buffer+(ln*(VGA_WIDTH));
 	}
 
+// Place character at X,Y
 void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = make_vgaentry(c, color);
 }
 
+// Scrolls terminal up
 void terminal_scroll() {
 	for (int i=1; i<VGA_HEIGHT; i++) {
 		blkcpy(terminal_get_line_address(i-1),terminal_get_line_address(i),VGA_WIDTH);
@@ -40,6 +44,7 @@ void terminal_scroll() {
 		}
 	}
 
+// Sets cursor location
 void terminal_update_cursor(u16 row, u16 col) {
 	u16 position=(row*80) + col;
  
@@ -51,6 +56,7 @@ void terminal_update_cursor(u16 row, u16 col) {
 	outb(0x3D5, (unsigned char )((position>>8)&0xFF));
 }
 
+// Puts character in next position. \n skips to next line
 void terminal_putchar(char c) {
 	if (c=='\n') {
 		terminal_row++;
@@ -71,21 +77,25 @@ void terminal_putchar(char c) {
 	}
 }
 
+// Write null-terminated string to terminal
 void terminal_writestring(const char* data) {
 	size_t datalen = strlen(data);
 	for (size_t i = 0; i < datalen; i++)
 		terminal_putchar(data[i]);
 }
 
+// Advances to next line
 void terminal_newline() {
 	terminal_writestring("\n");
 	}
 
+// Writes a 4-bit number as hex
 void terminal_writenibble(unsigned char n) {
 	n&=0xf;
 	terminal_putchar(terminal_hexchars[n]);
 	}
 
+// Writes a 32 bit unsigned number
 void terminal_writeu32(unsigned long d) {
 	int skipZeros= 1;
 	u8 nib;
@@ -102,7 +112,7 @@ void terminal_writeu32(unsigned long d) {
 		}
 	}
 
-
+// Writes a byte without a preceding "0x"
 void terminal_hexdump_byte(u8 d) {
 	u8 nib;
 
@@ -113,6 +123,7 @@ void terminal_hexdump_byte(u8 d) {
 		}
 	}
 
+// Writes a row for a hexdump
 void terminal_hexdump_row(void *ptr, int off, int len) {
 	u8 *pca = (u8*)ptr;
 
@@ -133,6 +144,7 @@ void terminal_hexdump_row(void *ptr, int off, int len) {
 	terminal_newline();
 	}
 
+// Writes a buffer of memory to the screen, displayed both in hex and ASCII
 void terminal_hexdump(void *ptr, int len) {
 	int full_lines = len/8;
 	int pln_len = len%8;
